@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- `viewport-fit=cover` is what makes the safe-area insets readable at all;
+         without it the page is letterboxed inside the notch rather than told
+         where it is. Page zoom is deliberately left alone: the map has its own
+         pinch and opts out for itself, and disabling the browser's is an
+         accessibility cost paid by everyone to fix a problem only the canvas
+         had. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#15181d" />
+
+    <title>Idle Grid Factory - free browser idle factory game</title>
+    <meta
+      name="description"
+      content="Free browser idle game. Mine ore, lay belts, tunnel under your own bus, smelt plates and build a grid factory that keeps producing while you are away. No install, no account."
+    />
+    <link rel="canonical" href="https://mezeman1.github.io/idle-factory-grid/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="application-name" content="Idle Grid Factory" />
+    <meta name="apple-mobile-web-app-title" content="Idle Grid Factory" />
+
+    <link rel="icon" href="./favicon.ico" sizes="32x32" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Idle Grid Factory" />
+    <meta property="og:title" content="Idle Grid Factory - free browser idle factory game" />
+    <meta
+      property="og:description"
+      content="Mine ore, lay belts, tunnel under your own bus and automate a grid factory that keeps producing while you are away. Plays in the browser, no install."
+    />
+    <meta property="og:url" content="https://mezeman1.github.io/idle-factory-grid/" />
+    <meta property="og:image" content="https://mezeman1.github.io/idle-factory-grid/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A belt line feeding a hub, with a tunnel running over it, under the words Idle Grid Factory." />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Idle Grid Factory - free browser idle factory game" />
+    <meta
+      name="twitter:description"
+      content="Mine ore, lay belts, tunnel under your own bus and automate a grid factory that keeps producing while you are away."
+    />
+    <meta name="twitter:image" content="https://mezeman1.github.io/idle-factory-grid/og.png" />
+
+    <!-- Structured data, so a search result can show this as a game rather
+         than as an untyped page. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Idle Grid Factory",
+        "url": "https://mezeman1.github.io/idle-factory-grid/",
+        "image": "https://mezeman1.github.io/idle-factory-grid/og.png",
+        "description": "Free browser idle game. Mine ore, lay belts, tunnel under your own bus, smelt plates and build a grid factory that keeps producing while you are away.",
+        "genre": ["Idle", "Incremental", "Factory", "Simulation"],
+        "gamePlatform": "Web browser",
+        "applicationCategory": "Game",
+        "operatingSystem": "Any modern browser",
+        "playMode": "SinglePlayer",
+        "inLanguage": "en",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="./assets/index-b1woR2J5.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/Geometry-C32EGgIC.js">
+    <link rel="modulepreload" crossorigin href="./assets/canvasUtils-D0IGjuii.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderTargetSystem-BCsogmy7.js">
+    <link rel="modulepreload" crossorigin href="./assets/getTextureBatchBindGroup-B1AAof0r.js">
+    <link rel="modulepreload" crossorigin href="./assets/CanvasPool-BKHeaHAf.js">
+    <link rel="modulepreload" crossorigin href="./assets/BufferResource-D9AbLT6d.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-C-FyIt34.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!--
+      The game is a canvas behind an empty div, so a crawler that does not run
+      scripts would otherwise see a blank page. This describes it in the markup
+      itself, and doubles as the message anyone with scripts off actually gets.
+    -->
+    <noscript>
+      <h1>Idle Grid Factory</h1>
+      <p>
+        A free browser idle factory game. Mine ore out of the ground, lay belts to carry
+        it, run tunnels under lines you have already built, smelt plates, assemble gears
+        and circuits, and deliver everything to a hub that banks it. Spend what you bank
+        on an upgrade tree that is refundable to the last item, then close the tab: the
+        factory keeps earning while you are away.
+      </p>
+      <p>It needs JavaScript. Enable it and reload to play.</p>
+    </noscript>
+  </body>
+</html>

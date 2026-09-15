@@ -1,0 +1,379 @@
+/*
+ @name : 锅巴汉化 - Web汉化插件
+ @author : 麦子、JAR、小蓝、好阳光的小锅巴、人民當家做主
+ @version : V0.6.5 - 2026-7-7
+ @website : http://www.g8hh.com
+ @idle games : http://www.gityx.com
+*/
+
+// ============================================================
+// 匹配配置
+// ============================================================
+// ignoreCase: true   忽略大小写(Gold/gold/GOLD都匹配), false=区分大小写
+// trimSpaces: true   忽略首尾空格(" gold "匹配"gold"), false=保留空格
+//
+// 影响范围：
+//   ✅ cnItems 精确匹配(字符串值+数组值)
+//   ✅ cnItems 分类索引({{分类名}}/{{分类名*}}/{{分类名*|sep|join}})
+//   ✅ cnResourceNames 名词翻译
+//   ✅ cnPrefix / cnPostfix 前后缀
+//   ✅ cnRegReplace / 排除规则 / 模板正则(通过 addIgnoreCaseFlag / cnConfig.ignoreCase 控制)
+var cnConfig = {
+    ignoreCase: true,
+    trimSpaces: true,
+};
+
+// ============================================================
+// cnCategoriesList — 分类名称注册表（供编辑器工具使用）
+// ============================================================
+// 分类数据由 cnItems 中的数组值 ["译文", "分类名"] 自动构建。
+// 此列表仅声明有哪些分类，以便编辑器提供分类选择/管理功能。
+var cnCategoriesList = [
+    "resource",
+    "item",
+];
+
+// ============================================================
+// cnItems — 主要翻译词条
+// ============================================================
+// 用法：
+//   "原文": "译文"                         → 精确静态匹配
+//   "原文": ["译文", "分类名"]               → 静态匹配 + 自动加入分类
+//   "Cost: {{0}}": "消耗：{{0}}"            → 模板匹配 ({{0}} 匹配任意值)
+//   "{{resource}}: {{%d}}": "{{resource}}：{{%d}}"  → 分类模板 + 数字验证
+//   "{{分类名*}}": 仅在该分类查找，找不到保留原文
+//   "{{分类名*|sep|join}}": 分类限定列表解析
+//   "{{*}}": 通用列表，逐项递归翻译
+//   "{{*|sep|join}}": 自定义分隔符/连接词的列表
+// ============================================================
+var cnItems = {
+    // --- 静态匹配 ---
+    "Welcome": "欢迎",
+    "Score": "分数",
+    "Health Potion": "生命药水",
+    "Hello World": "你好世界",
+    "Settings": "设置",
+
+    // --- 分类词条 [译文, 分类名] ---
+    "gold": ["金币", "resource"],
+    "wood": ["木材", "resource"],
+    "stone": ["石头", "resource"],
+    "iron": ["铁", "resource"],
+    "sword": ["剑", "item"],
+    "shield": ["盾牌", "item"],
+    "helmet": ["头盔", "item"],
+
+    // --- 模板 ({{0}} / {{1}}) ---
+    "Cost: {{0}}": "消耗：{{0}}",
+    "Next Improvement: {{0}}": "下次提升：{{0}}",
+    "Level {{0}}": "等级{{0}}",
+    "{{0}} x {{1}}": "{{0}} × {{1}}",
+
+    // --- 模板 ({{分类名}} + {{%d}}) ---
+    "{{resource}}: {{0}}": "{{resource}}：{{0}}",
+
+    // --- 模板 ({{分类名*}} 仅分类) ---
+    "Get {{0}} {{resource*}}": "获得 {{0}} {{resource*}}",
+
+    // --- 模板 ({{分类名*|sep|join}} 分类列表) ---
+    "Craft {{item*|,|和}}": "制作{{item*|,|和}}",
+
+    // --- 通用列表 {{*}} / {{*|sep|join}} ---
+    "Items: {{*}}": "物品：{{*}}",
+    "Mats: {{*|, |、}}": "材料：{{*|, |、}}",
+
+    // --- 数字占位符 {{%d}} ---
+    "HP: {{%d}}": "生命值：{{%d}}",
+    "DMG: {{%d}}": "伤害：{{%d}}",
+
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    "":["",""],
+    // 图标代码，不能汉化
+    "Jacorb's Games": "Jacorb's Games",
+    "???": "???",
+    "关注新公众号": "关注新公众号",
+    "打开微信扫一扫": "打开微信扫一扫",
+    "游戏攻略交流论坛": "游戏攻略交流论坛",
+    "点击加群": "点击加群",
+    "锅巴汉化": "锅巴汉化",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "x": "x",
+    "—": "—",
+    "•": "•",
+    "−": "−",
+    "×": "×",
+    "←": "←",
+    "@": "@",
+    "^": "^",
+    "&": "&",
+    "%": "%",
+    "--": "--",
+    "=": "=",
+    "?": "?",
+    "!": "!",
+    "$": "$",
+    "#": "#",
+    "/": "/",
+    "]": "]",
+    "[": "[",
+    "+": "+",
+    ".": ".",
+    "…": "…",
+    ":": ":",
+    "-": "-",
+    "|": "|",
+    "(": "(",
+    ")": ")",
+    "Scientific": "科学计数法",
+    "Standard": "标准",
+    "Blind": "盲文",
+    "Letters": "字母",
+    "Mixed Engineering": "混合工程",
+    "Mixed Scientific": "混合科学",
+    "Chemistry": "化学",
+    "Engineering": "工程符号",
+    "By Jacorb90": "By Jacorb90",
+    "content_copy": "content_copy",
+    "library_books": "library_books",
+    "discord": "discord",
+    "drag_handle": "drag_handle",
+    "edit": "edit",
+    "forum": "forum",
+    "content_paste": "content_paste",
+    "delete": "delete",
+    "info": "info",
+    "settings": "settings",
+    'Twitter': 'Twitter',
+    "Discord": "Discord",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "gityxcom": "gityxcom",
+    "Footer": "Footer",
+    "Wiki": "Wiki",
+    "gityx": "gityx",
+
+    //树游戏
+    'Loading...': '加载中...',
+    'ALWAYS': '一直',
+    'HARD RESET': '硬重置',
+    'Export to clipboard': '导出到剪切板',
+    'INCOMPLETE': '不完整',
+    'HIDDEN': '隐藏',
+    'AUTOMATION': '自动',
+    'NEVER': '从不',
+    'ON': '打开',
+    'OFF': '关闭',
+    'SHOWN': '显示',
+    'Play Again': '再次游戏',
+    'Keep Going': '继续',
+    'The Modding Tree Discord': '模型树Discord',
+    'You have': '你有',
+    'It took you {{formatTime(player.timePlayed)}} to beat the game.': '花费了 {{formatTime(player.timePlayed)}} 时间去通关游戏.',
+    'Congratulations! You have reached the end and beaten this game, but for now...': '恭喜你！ 您已经结束并通关了本游戏，但就目前而言...',
+    'Main Prestige Tree server': '主声望树服务器',
+    'Reach {{formatWhole(ENDGAME)}} to beat the game!': '达到 {{formatWhole(ENDGAME)}} 去通关游戏!',
+    "Loading... (If this takes too long it means there was a serious error!": "正在加载...（如果这花费的时间太长，则表示存在严重错误！",
+    'Loading... (If this takes too long it means there was a serious error!)←': '正在加载...（如果时间太长，则表示存在严重错误！）←',
+    'Main\n\t\t\t\tPrestige Tree server': '主\n\t\t\t\t声望树服务器',
+    'The Modding Tree\n\t\t\t\t\t\t\tDiscord': '模型树\n\t\t\t\t\t\t\tDiscord',
+    'Please check the Discord to see if there are new content updates!': '请检查 Discord 以查看是否有新的内容更新！',
+    'aqua': '水色',
+    'AUTOMATION, INCOMPLETE': '自动化，不完整',
+    'LAST, AUTO, INCOMPLETE': '最后，自动，不完整',
+    'NONE': '无',
+    'P: Reset for': 'P: 重置获得',
+    'Gityx游戏': 'Gityx游戏',
+    'Git游戏': 'Git游戏',
+    'QQ群号': 'QQ群号',
+    'x': 'x',
+    'QQ群号:': 'QQ群号:',
+    '* 启用后台游戏': '* 启用后台游戏',
+    '更多同类游戏:': '更多同类游戏:',
+    'i': 'i',
+    'I': 'I',
+    'II': 'II',
+    'III': 'III',
+    'IV': 'IV',
+    'V': 'V',
+    'VI': 'VI',
+    'VII': 'VII',
+    'VIII': 'VIII',
+    'X': 'X',
+    'XI': 'XI',
+    'XII': 'XII',
+    'XIII': 'XIII',
+    'XIV': 'XIV',
+    'XV': 'XV',
+    'XVI': 'XVI',
+    'A': 'A',
+    'B': 'B',
+    'C': 'C',
+    'D': 'D',
+    'E': 'E',
+    'F': 'F',
+    'G': 'G',
+    'H': 'H',
+    'I': 'I',
+    'J': 'J',
+    'K': 'K',
+    'L': 'L',
+    'M': 'M',
+    'N': 'N',
+    'O': 'O',
+    'P': 'P',
+    'Q': 'Q',
+    'R': 'R',
+    'S': 'S',
+    'T': 'T',
+    'U': 'U',
+    'V': 'V',
+    'W': 'W',
+    'X': 'X',
+    'Y': 'Y',
+    'Z': 'Z',
+    'a': 'a',
+    'b': 'b',
+    'c': 'c',
+    'd': 'd',
+    'e': 'e',
+    'f': 'f',
+    'g': 'g',
+    'h': 'h',
+    'i': 'i',
+    'j': 'j',
+    'k': 'k',
+    'l': 'l',
+    'm': 'm',
+    'n': 'n',
+    'o': 'o',
+    'p': 'p',
+    'q': 'q',
+    'r': 'r',
+    's': 's',
+    't': 't',
+    'u': 'u',
+    'v': 'v',
+    'w': 'w',
+    'x': 'x',
+    'y': 'y',
+    'z': 'z',
+    '<': '<',
+    '<<': '<<',
+    '>': '>',
+    '>>': '>>',
+    'Jan': '1月',
+    'Feb': '2月',
+    'Mar': '3月',
+    'Apr': '4月',
+    'May': '5月',
+    'Jun': '6月',
+    'Jul': '7月',
+    'Aug': '8月',
+    'Sep': '9月',
+    'Oct': '10月',
+    'Nov': '11月',
+    'Dec': '12月',
+    
+};
+// ============================================================
+// cnResourceNames — 资源名词翻译（备用，优先级低于 cnItems）
+// ============================================================
+// 支持 "名词: 数值" 格式的自动翻译（如 "Mana: 500" → "法力：500"）
+var cnResourceNames = {};
+// cnRegReplace — 正则替换（备用，优先级低于精确匹配但高于模板/分类）
+var cnRegReplace = new Map([
+    [/^requires ([\d\.]+) more research points$/, '需要$1个研究点'],
+    [/^(\d+) Royal points$/, '$1 皇家点数'],
+    [/^Cost: (\d+) RP$/, '成本：$1 皇家点数'],
+    [/^Usages: (\d+)\/$/, '用途：$1\/'],
+    [/^workers: (\d+)\/$/, '工人：$1\/'],
+]);
+// 前缀/后缀提取（备用）
+var cnPrefix = {
+    ": ": "： ",
+};
+var cnPostfix = {
+    ":": "：",
+};
+// 排除规则
+var cnExcludeWhole = [];
+var cnExcludePostfix = [];

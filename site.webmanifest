@@ -1,0 +1,17 @@
+{
+  "name": "Idle Grid Factory",
+  "short_name": "Grid Factory",
+  "description": "Mine ore, lay belts, tunnel under your own bus and automate a grid factory that keeps producing while you are away.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#15181d",
+  "theme_color": "#15181d",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
