@@ -781,6 +781,7 @@ var cnRegReplace = new Map([
     [/^It took you (.+) to beat the game.$/, '你通关游戏用了 $1。'],
     [/^You have (.+) points$/, '你有 $1 点数'],
     [/^Next at (.+) points$/, '下一个在 $1 点数'],
+    [/^ Paid from your factory\'s average output of (.+) score\/sec over the last minute of play, at (.+) while away. Build a wider base and the rate carries over next time. $/, '根据游戏最近一分钟工厂平均产出 $1 分数/秒计算离线收益，离线结算比例为$2。扩建工厂规模，下次上线时产出速率可延续生效。'],
     [/^ Away (.+) min. $/, ' 离开了 $1 分钟。'],
     [/^ Objective (.+)$/, ' 目标 $1 '],
     [/^(.+) ticks played$/, '进行游戏 $1 tick'],
